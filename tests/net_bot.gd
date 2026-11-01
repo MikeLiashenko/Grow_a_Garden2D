@@ -132,6 +132,14 @@ func _ui() -> void:
 		await _wait(2.5)
 		await _shot(dir + "/" + entry[1] + ".png")
 	var page: Node = get_tree().current_scene
+	page._show_google_code("https://www.google.com/device", "ABCD-EFGH")
+	await _wait(0.5)
+	await _shot(dir + "/gt_google.png")
+	Net.link = RoomLink.new("ABC234")
+	page.add_child(load("res://scripts/ui/players_panel.gd").new())
+	await _wait(0.5)
+	await _shot(dir + "/gt_players.png")
+	Net.link = null
 	Net.uid = ""
 	page._show_current()
 	await _wait(0.5)

@@ -143,6 +143,19 @@ func line_edit(placeholder: String, secret := false) -> LineEdit:
 	return e
 
 
+## Puts text on the clipboard and says so on the button for a moment.
+func copy_button(text: String) -> Button:
+	var b := button("COPY", "blue")
+	b.pressed.connect(func():
+		DisplayServer.clipboard_set(text)
+		b.text = "COPIED!"
+		await get_tree().create_timer(1.5).timeout
+		if is_instance_valid(b):
+			b.text = "COPY"
+	)
+	return b
+
+
 func icon(texture: Texture2D) -> TextureRect:
 	var r := TextureRect.new()
 	r.texture = texture

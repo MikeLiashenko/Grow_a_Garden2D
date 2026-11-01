@@ -5,15 +5,21 @@ var _list: VBoxContainer
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_CENTER)
+	custom_minimum_size = Vector2(220, 0)
 	grow_horizontal = Control.GROW_DIRECTION_BOTH
 	grow_vertical = Control.GROW_DIRECTION_BOTH
-	custom_minimum_size = Vector2(220, 0)
+	set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	var col := Ui.vbox(4)
 	add_child(col)
 	col.add_child(Ui.label(Net.link.title(), Ui.GOLD))
 	if Net.link is RoomLink:
-		col.add_child(Ui.label("Share this code: " + Net.link.code, Ui.CREAM))
+		var share := Ui.hbox(4)
+		var line := Ui.label("Share this code: " + Net.link.code, Ui.CREAM)
+		line.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		line.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		share.add_child(line)
+		share.add_child(Ui.copy_button(Net.link.code))
+		col.add_child(share)
 	_list = Ui.vbox(2)
 	col.add_child(_list)
 	var close := Ui.button("CLOSE")

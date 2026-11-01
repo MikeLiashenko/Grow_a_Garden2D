@@ -1,3 +1,5 @@
 .godot/
 build/
 *.tmp
+client_secret_*.json
+scripts/net/net_secrets.gd*

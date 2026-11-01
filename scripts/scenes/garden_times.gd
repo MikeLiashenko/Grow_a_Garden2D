@@ -154,11 +154,21 @@ func _finish_auth(err: String) -> void:
 
 ## Google gives a short code to approve in a browser, the same on every device.
 func _on_google_code(page: String, code: String) -> void:
+	_show_google_code(page, code)
+	DisplayServer.clipboard_set(code)
+	OS.shell_open(page)
+
+
+func _show_google_code(page: String, code: String) -> void:
 	_clear()
 	_body.add_child(_text("Your browser is opening Google. Enter this code there:"))
 	var big := Ui.label(code, Color("#a83028"), 16)
 	big.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_body.add_child(big)
+	var copy := Ui.copy_button(code)
+	copy.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	copy.custom_minimum_size.x = 80
+	_body.add_child(copy)
 	_body.add_child(_text(page))
 	var cancel := Ui.button("CANCEL")
 	cancel.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -167,8 +177,6 @@ func _on_google_code(page: String, code: String) -> void:
 		_show_sign_in()
 	)
 	_body.add_child(cancel)
-	DisplayServer.clipboard_set(code)
-	OS.shell_open(page)
 
 
 func _show_name_choice() -> void:
@@ -236,6 +244,7 @@ func _show_club() -> void:
 		title.custom_minimum_size.x = 0
 		title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		entry.add_child(title)
+		entry.add_child(Ui.copy_button(room))
 		var play := Ui.button("PLAY", "green")
 		play.pressed.connect(func(): _open_session(RoomLink.new(room), RoomLink.copy_path(room)))
 		entry.add_child(play)

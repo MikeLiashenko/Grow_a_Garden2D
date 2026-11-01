@@ -6,6 +6,7 @@ signal account_changed
 signal google_code(url: String, code: String)
 
 const Config := preload("res://scripts/net/net_config.gd")
+const SECRETS_FILE := "res://scripts/net/net_secrets.gd"
 
 const ACCOUNT_FILE := "user://account.json"
 const AUTH_URL := "https://identitytoolkit.googleapis.com/v1/accounts:"
@@ -73,7 +74,7 @@ func auth_available() -> bool:
 
 
 func google_available() -> bool:
-	return Config.GOOGLE_CLIENT_ID != "" and api_key != ""
+	return Config.GOOGLE_CLIENT_ID != "" and api_key != "" and _google_secret() != ""
 
 
 func traffic_in() -> int:
@@ -242,7 +243,7 @@ func sign_in_google() -> String:
 	var page: String = d.get("verification_url", d.get("verification_uri", ""))
 	google_code.emit(page, d["user_code"])
 	var wait := float(d.get("interval", 5))
-	var body := "client_id=%s&client_secret=%s&device_code=%s&grant_type=%s" % [Config.GOOGLE_CLIENT_ID.uri_encode(), Config.GOOGLE_CLIENT_SECRET.uri_encode(), String(d["device_code"]).uri_encode(), "urn:ietf:params:oauth:grant-type:device_code".uri_encode()]
+	var body := "client_id=%s&client_secret=%s&device_code=%s&grant_type=%s" % [Config.GOOGLE_CLIENT_ID.uri_encode(), _google_secret().uri_encode(), String(d["device_code"]).uri_encode(), "urn:ietf:params:oauth:grant-type:device_code".uri_encode()]
 	var deadline := Time.get_unix_time_from_system() + float(d.get("expires_in", 900))
 	while Time.get_unix_time_from_system() < deadline:
 		await get_tree().create_timer(wait).timeout
@@ -259,6 +260,10 @@ func sign_in_google() -> String:
 			_:
 				return "Google sign-in was refused"
 	return "The code has expired"
+
+
+func _google_secret() -> String:
+	return load(SECRETS_FILE).GOOGLE_CLIENT_SECRET if ResourceLoader.exists(SECRETS_FILE) else ""
 
 
 func cancel_google() -> void:
