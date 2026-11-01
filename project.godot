@@ -1,0 +1,44 @@
+; Engine configuration file.
+config_version=5
+
+[application]
+
+config/name="Grow a Garden 2D"
+config/description="Top-down pixel gardening game."
+config/version="0.1"
+run/main_scene="res://scenes/main_menu.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.png"
+boot_splash/show_image=false
+boot_splash/bg_color=Color(0.0627451, 0.0784314, 0.0588235, 1)
+
+[autoload]
+
+Settings="*res://scripts/autoload/settings.gd"
+Sfx="*res://scripts/autoload/sfx.gd"
+Art="*res://scripts/autoload/art.gd"
+Ui="*res://scripts/autoload/ui.gd"
+Session="*res://scripts/autoload/session.gd"
+Net="*res://scripts/autoload/net.gd"
+DevTour="*res://scripts/autoload/dev_tour.gd"
+
+[display]
+
+window/size/viewport_width=640
+window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+window/stretch/scale_mode="integer"
+window/handheld/orientation=4
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+textures/vram_compression/import_etc2_astc=true
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
+environment/defaults/default_clear_color=Color(0.109804, 0.239216, 0.133333, 1)
